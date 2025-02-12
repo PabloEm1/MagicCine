@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router'; // ✅ Importar RouterModule
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { SliderComponent } from './components/slider/slider.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [NavbarComponent, SliderComponent, RouterOutlet, RouterModule], // ✅ Importar RouterModule
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'MagicCine';
+  title = 'mi-angular-app';
 }

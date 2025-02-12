@@ -1,0 +1,15 @@
+<div class="slider-container">
+  <div class="slider">
+    <img
+      *ngFor="let movie of movies; let i = index"
+      [src]="movie.image"
+      [alt]="movie.title"
+      class="slide"
+      [class.active]="i === currentIndex"
+      [class.fade]="isFading"
+    />
+  </div>
+
+  <button class="prev" (click)="fadeToPrevSlide()">&#10094;</button>
+  <button class="next" (click)="fadeToNextSlide()">&#10095;</button>
+</div>

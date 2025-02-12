@@ -1,0 +1,91 @@
+<!-- 🔹 LISTA DE PELÍCULAS -->
+<div class="container">
+  <h1>Películas</h1>
+  <div class="movie-list">
+    <div class="movie-card" *ngFor="let movie of movies" (click)="openModal(movie)">
+      <img [src]="movie.image" [alt]="movie.title" />
+      <div class="movie-info">
+        <h2>{{ movie.title }}</h2>
+        <p>Director: {{ movie.director }}</p>
+        <p>Año: {{ movie.year }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 🔹 MODAL DE DETALLE DE PELÍCULA -->
+<div *ngIf="selectedMovie && !showScheduleModal && !showSeatsModal && !showTicketTypeModal && !showPaymentModal" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-btn" (click)="closeModal()">&times;</span>
+    <h2>{{ selectedMovie.title }}</h2>
+    <img [src]="selectedMovie.image" [alt]="selectedMovie.title" />
+    <p><strong>Director:</strong> {{ selectedMovie.director }}</p>
+    <p><strong>Año:</strong> {{ selectedMovie.year }}</p>
+    <p><strong>Sinopsis:</strong> {{ selectedMovie.synopsis }}</p>
+    <button class="buy-ticket" (click)="openScheduleModal()">Comprar Entrada</button>
+  </div>
+</div>
+
+<!-- 🔹 MODAL DE SELECCIÓN DE HORARIO -->
+<div *ngIf="showScheduleModal" class="modal-overlay" (click)="closeScheduleModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-btn" (click)="closeScheduleModal()">&times;</span>
+    <h2>Selecciona la Hora</h2>
+    <p>Película: <strong>{{ selectedMovie.title }}</strong></p>
+    
+    <label for="schedule">Horarios disponibles:</label>
+    <select id="schedule" [(ngModel)]="selectedSchedule">
+      <option *ngFor="let time of availableSchedules" [value]="time">{{ time }}</option>
+    </select>
+
+    <button class="confirm-schedule" (click)="confirmSchedule()">Confirmar Horario</button>
+  </div>
+</div>
+
+<!-- 🔹 MODAL DE SELECCIÓN DE ASIENTOS -->
+<div *ngIf="showSeatsModal" class="modal-overlay" (click)="closeSeatsModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-btn" (click)="closeSeatsModal()">&times;</span>
+    <h2>Selecciona tus Asientos</h2>
+    <div class="seats-grid">
+      <div *ngFor="let seat of seats; index as i" 
+           class="seat" 
+           [class.selected]="seat.selected" 
+           [class.occupied]="seat.occupied" 
+           (click)="toggleSeatSelection(i)">
+        {{ seat.number }}
+      </div>
+    </div>
+    <button class="confirm-seats" (click)="confirmSeats()">Confirmar Asientos</button>
+  </div>
+</div>
+
+<!-- 🔹 MODAL DE SELECCIÓN DE TIPO DE ENTRADA -->
+<div *ngIf="showTicketTypeModal" class="modal-overlay" (click)="closeTicketTypeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-btn" (click)="closeTicketTypeModal()">&times;</span>
+    <h2>Selecciona Tipo de Entrada</h2>
+    <div *ngFor="let seat of selectedSeats">
+      <label for="ticketType-{{ seat.number }}">Asiento {{ seat.number }}:</label>
+      <select id="ticketType-{{ seat.number }}" [(ngModel)]="seat.type">
+        <option *ngFor="let type of ticketTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+    <button class="confirm-ticket-types" (click)="confirmTicketTypes()">Confirmar Tipo de Entrada</button>
+  </div>
+</div>
+
+<!-- 🔹 MODAL DE PAGO -->
+<div *ngIf="showPaymentModal" class="modal-overlay" (click)="closePaymentModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-btn" (click)="closePaymentModal()">&times;</span>
+    <h2>Datos de Pago</h2>
+    <form (submit)="processPayment($event)">
+      <input type="text" placeholder="Nombre en la Tarjeta" [(ngModel)]="paymentData.cardName" name="cardName" required>
+      <input type="text" placeholder="Número de Tarjeta" [(ngModel)]="paymentData.cardNumber" name="cardNumber" required maxlength="16">
+      <input type="text" placeholder="Fecha de Expiración (MM/AA)" [(ngModel)]="paymentData.expiration" name="expiration" required maxlength="5">
+      <input type="text" placeholder="CVV" [(ngModel)]="paymentData.cvv" name="cvv" required maxlength="3">
+      <button type="submit" class="confirm-payment">Pagar</button>
+    </form>
+  </div>
+</div>
