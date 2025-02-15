@@ -11,17 +11,31 @@
       <li class="nav-item">
         <button class="nav-link btn btn-link" routerLink="/movies">PELICULAS</button>
       </li>
-      <li class="nav-item">
-        <!-- ✅ Botón que abre el pop-up de inicio de sesión -->
-        <button class="nav-link btn btn-link" (click)="openLoginModal()">INICIAR SESIÓN</button>
+
+      <!-- ✅ NUEVA PESTAÑA: "Mis Reservas" (solo si el usuario está logueado) -->
+      <li class="nav-item" *ngIf="isLoggedIn">
+        <button class="nav-link btn btn-link" routerLink="/reservations">MIS RESERVAS</button>
       </li>
-      <li class="nav-item">
-        <!-- ✅ Botón que abre el pop-up de registro -->
-        <button class="nav-link btn btn-link" (click)="openRegisterModal()">REGISTRARSE</button>
-      </li>
+
+      <!-- ✅ Alinear a la derecha -->
+      <div class="ml-auto d-flex">
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <button class="nav-link btn btn-link" (click)="openLoginModal()">INICIAR SESIÓN</button>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <button class="nav-link btn btn-link" (click)="openRegisterModal()">REGISTRARSE</button>
+        </li>
+
+        <!-- ✅ Mostrar el nombre del usuario y el botón de "Cerrar Sesión" cuando está logueado -->
+        <li class="nav-item d-flex align-items-center" *ngIf="isLoggedIn">
+          <span class="nav-link">Bienvenido, <strong>{{ loggedInUser }}</strong>!</span>
+          <button class="nav-link btn btn-danger" (click)="logout()">Cerrar Sesión</button>
+        </li>
+      </div>
     </ul>
   </div>
 </nav>
+
 
 <!-- ✅ MODAL DE INICIO DE SESIÓN -->
 <div *ngIf="isLoginModalOpen" class="modal-overlay" (click)="closeModals()">

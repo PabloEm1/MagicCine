@@ -6,20 +6,24 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule,NgIf, FormsModule], // ✅ Agregar RouterModule aquí
+  imports: [RouterModule, NgIf, FormsModule], // ✅ Agregar RouterModule aquí
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
   isLoginModalOpen = false;
   isRegisterModalOpen = false;
-  
+
   username = '';
   password = '';
-  
+
   registerUsername = '';
   registerEmail = '';
   registerPassword = '';
+
+  // ✅ Estado para controlar si el usuario ha iniciado sesión
+  isLoggedIn = false;
+  loggedInUser = '';
 
   // ✅ Abrir modal de inicio de sesión
   openLoginModal() {
@@ -41,7 +45,8 @@ export class NavbarComponent {
 
   // ✅ Simulación de inicio de sesión
   login() {
-    alert(`Usuario: ${this.username}, Contraseña: ${this.password}`);
+    this.loggedInUser = 'Mario';  // Simular el nombre de usuario como 'Mario'
+    this.isLoggedIn = true;
     this.closeModals();
   }
 
@@ -49,5 +54,11 @@ export class NavbarComponent {
   register() {
     alert(`Usuario: ${this.registerUsername}, Correo: ${this.registerEmail}, Contraseña: ${this.registerPassword}`);
     this.closeModals();
+  }
+
+  // ✅ Cerrar sesión
+  logout() {
+    this.isLoggedIn = false;
+    this.loggedInUser = '';
   }
 }
